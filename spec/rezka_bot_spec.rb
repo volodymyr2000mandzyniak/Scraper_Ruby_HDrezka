@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative '../lib/rezka_bot'
 require 'capybara/rspec'
 
@@ -19,21 +17,16 @@ RSpec.describe RezkaBot do
     Capybara.current_session.driver.quit
   end
 
-  let(:rezka_bot) { RezkaBot.new }
-
-  describe 'login' do
-    it 'check_login' do
-      expect(RezkaBot.new.login('hdrezka_pars',
-                                'C2j85@Pi.zJDnm-')).to eq(login_name: 'hdrezka_pars', login_password: 'C2j85@Pi.zJDnm-')
-    end
-  end
+  let(:rezka_bot) { described_class.new }
 
   describe '#get_movie_titles_and_genres' do
     it 'displays movie titles and genres' do
-      # rezka_bot.login('hdrezka_pars', 'C2j85@Pi.zJDnm-')
-      rezka_bot.get_movie_titles_and_genres
+      rezka_bot.login('hdrezka_pars', 'C2j85@Pi.zJDnm-')
+      movies_data = rezka_bot.get_movie_titles_and_genres
 
-      expect(page).to have_content('All movies')
+      expect(movies_data).to be_an(Array)
+      expect(movies_data.first).to include(:title, :genre)
     end
   end
 end
+
